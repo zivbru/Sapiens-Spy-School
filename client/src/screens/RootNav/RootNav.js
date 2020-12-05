@@ -15,9 +15,11 @@ const RootNavigator = ({ logout }) => {
     <>
       <AppBar position='static'>
         <Toolbar>
-          <Button color='inherit' onClick={logout}>
-            Logout
-          </Button>
+          {auth.isLoggedIn && (
+            <Button color='inherit' onClick={logout}>
+              Logout
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
       {auth.isLoggedIn || user ? <Monitor /> : <Login />}
