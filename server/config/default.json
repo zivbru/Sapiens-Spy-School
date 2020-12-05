@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://zivbru123:zivbru123@cluster0.f9lyt.mongodb.net/SapiensSpySchool?retryWrites=true&w=majority",
+    "jwtSecret": "bhJd39934ccSf85"
+  }
