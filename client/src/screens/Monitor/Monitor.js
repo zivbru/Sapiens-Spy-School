@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useStyles from './Styles';
-import socketIOClient from 'socket.io-client';
+import io from 'socket.io-client';
 import {
   Container,
   TextField,
@@ -14,7 +14,7 @@ import { start, stop, insertLog } from '../../store/actions/logs';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 const ENDPOINT = 'http://localhost:5000';
-const socket = socketIOClient(ENDPOINT);
+const socket = io(ENDPOINT);
 
 const Monitor = ({ start, stop, insertLog, logs }) => {
   const classes = useStyles();
@@ -25,22 +25,18 @@ const Monitor = ({ start, stop, insertLog, logs }) => {
       alert('You have to select a folder first!!');
       return;
     }
-    console.log('start');
     start(dir);
   };
   const onStopClick = () => {
-    console.log('stop');
     stop();
   };
 
   useEffect(() => {
     socket.on('super event', function (data) {
-      console.log('data', data);
       insertLog(data);
     });
     // CLEAN UP THE EFFECT
     return () => socket.disconnect();
-    //
   }, [insertLog]);
 
   return (

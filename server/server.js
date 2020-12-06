@@ -26,8 +26,7 @@ const server = app.listen(PORT, () => {
 // Socket setup
 const io = socket(server, {
   cors: {
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST'],
+    'Access-Control-Allow-Origin': '*',
   },
 });
 
@@ -54,33 +53,39 @@ app.use(
         .on('add', (data) => {
           const msg = { msg: `File ${data} has been added` };
           events[dir].push(msg);
+          // add to db
           console.log('File', data, 'has been added');
           io.sockets.emit('super event', msg);
         })
         .on('addDir', function (data) {
           const msg = { msg: `Directory ${data} has been added` };
           events[dir].push(msg);
+          // add to db
           console.log('Directory ', data, 'has been added');
           io.sockets.emit('super event', msg);
         })
         .on('unlinkDir', (data) => {
           const msg = { msg: `Directory ${data} has been removed` };
           events[dir].push(msg);
+          // add to db
           console.log(`Directory ${data} has been removed`);
           io.sockets.emit('super event', msg);
         })
         .on('change', function (data) {
           const msg = { msg: `File ${data} has been changed` };
           events[dir].push(msg);
+          // add to db
           console.log('File', data, 'has been changed');
           io.sockets.emit('super event', msg);
         })
         .on('unlink', function (data) {
           const msg = { msg: `File ${data} has been removed` };
           events[dir].push(msg);
+          // add to db
           console.log('File', data, 'has been removed');
           io.sockets.emit('super event', msg);
         });
+      return res.send();
     } catch (err) {
       console.log(err.message);
       res.status(500).send('Server error');
@@ -89,18 +94,24 @@ app.use(
 
   router.post('/api/watcher/stop', [], async (req, res) => {
     try {
-      await watcher.unwatch(dir);
+      if (watcher) {
+        await watcher.unwatch(dir);
+      }
       console.log('stop');
       events[dir] = null;
+      // delete db
+      return res.send();
     } catch (err) {
       console.log(err.message);
       res.status(500).send('Server error');
     }
   }),
 
-  router.get('/status', [], async (req, res) => {
+  router.get('/api/watcher/status', [], async (req, res) => {
     try {
-      return res.json(events[dir]);
+      console.log(events[dir]);
+      // get from db all logs for this dir
+      res.send(events[dir]);
     } catch (err) {
       console.log(err.message);
       res.status(500).send('Server error');

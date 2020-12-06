@@ -13,6 +13,7 @@ const logReducer = (state = initialState, action) => {
     case START:
       return {
         ...state,
+        logs: [...state.logs, action.payload],
       };
     case STOP:
       return {

@@ -1,17 +1,17 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
   output: {
     filename: 'bundle.[hash].js',
+    publicPath: '',
   },
   mode: 'development',
   devServer: {
     contentBase: path.resolve(__dirname, './dist'),
     index: 'index.html',
-    port: 9000,
+    port: 3001,
     writeToDisk: true,
   },
 
@@ -32,10 +32,9 @@ module.exports = {
       },
     ],
   },
-  externals: ['http://localhost:5000/socket.io/'],
   resolve: {
     alias: {
-      'socket.io-client': path.join(
+      socketIOClient: path.join(
         __dirname,
         'node_modules',
         'socket.io-client',
@@ -47,7 +46,7 @@ module.exports = {
 
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'public/index.html',
+      template: 'public/index_template.html',
       favicon: 'public/favicon.ico',
     }),
   ],

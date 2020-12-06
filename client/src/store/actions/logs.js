@@ -1,16 +1,14 @@
 import api from '../../utils/api';
-import { START, STOP, INSERT_LOG } from '../types';
+import { START, STOP, INSERT_LOG, CLEAR_LOGS } from '../types';
 
 //Start monitor
 export const start = (path) => async (dispatch) => {
   const body = { path };
   try {
     console.log('start');
-    const result = await api.post('/watcher/start', body);
-    console.log('result', result);
+    await api.post('/watcher/start', body);
     dispatch({
       type: START,
-      payload: result.data,
     });
   } catch (err) {
     console.error('Login failed');
@@ -34,6 +32,16 @@ export const insertLog = (log) => async (dispatch) => {
     dispatch({
       type: INSERT_LOG,
       payload: log.msg,
+    });
+  } catch (err) {
+    console.error('Login failed');
+  }
+};
+
+export const clearLogs = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: CLEAR_LOGS,
     });
   } catch (err) {
     console.error('Login failed');

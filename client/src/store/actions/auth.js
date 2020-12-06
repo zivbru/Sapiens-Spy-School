@@ -6,37 +6,25 @@ export const login = (email, password) => async (dispatch) => {
   const body = { email, password };
 
   try {
-    const user = await api.post('/auth/login', body);
-    if (user.data) {
-      localStorage.setItem('user', JSON.stringify(user.data));
-    }
-    dispatch({
-      type: LOGIN,
-      payload: user.data,
-    });
-  } catch (err) {
-    console.error('Login failed');
-  }
-};
+    if (email && password) {
+      const user = await api.post('/auth/login', body);
+      if (user.data) {
+        localStorage.setItem('user', JSON.stringify(user.data));
 
-//Login user with google
-export const loginWithGoogle = (res) => async (dispatch) => {
-  const user = res.profileObj;
-  try {
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
+        dispatch({
+          type: LOGIN,
+          payload: user.data,
+        });
+      } else {
+        throw new Error('Invalid');
+      }
     }
-    dispatch({
-      type: LOGIN,
-      payload: user.data,
-    });
   } catch (err) {
     console.error('Login failed');
   }
 };
 
 export const logout = () => async (dispatch) => {
-  console.log('logout');
   try {
     localStorage.removeItem('user');
     dispatch({
