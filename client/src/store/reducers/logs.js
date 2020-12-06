@@ -6,6 +6,7 @@ const initialState = {
 const logReducer = (state = initialState, action) => {
   switch (action.type) {
     case INSERT_LOG:
+      console.log('INSERT_LOG');
       return {
         ...state,
         logs: [...state.logs, action.payload],
@@ -13,7 +14,6 @@ const logReducer = (state = initialState, action) => {
     case START:
       return {
         ...state,
-        logs: [...state.logs, action.payload],
       };
     case STOP:
       return {

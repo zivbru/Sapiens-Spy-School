@@ -1,5 +1,5 @@
 import api from '../../utils/api';
-import { LOGIN, LOGOUT } from '../types';
+import { LOGIN, LOGOUT, GOOGLE_LOGIN } from '../types';
 
 //Login user
 export const login = (email, password) => async (dispatch) => {
@@ -24,9 +24,20 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
+export const loginWithGoogle = (res) => async (dispatch) => {
+  const user = {
+    profile: res.profileObj,
+    token: res.tokenObj,
+  };
+  localStorage.setItem('google-user', JSON.stringify(user));
+
+  dispatch({ type: GOOGLE_LOGIN, user });
+};
+
 export const logout = () => async (dispatch) => {
   try {
     localStorage.removeItem('user');
+    localStorage.removeItem('google-user');
     dispatch({
       type: LOGOUT,
     });

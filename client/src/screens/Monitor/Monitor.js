@@ -14,7 +14,6 @@ import { start, stop, insertLog } from '../../store/actions/logs';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 const ENDPOINT = 'http://localhost:5000';
-const socket = io(ENDPOINT);
 
 const Monitor = ({ start, stop, insertLog, logs }) => {
   const classes = useStyles();
@@ -32,6 +31,8 @@ const Monitor = ({ start, stop, insertLog, logs }) => {
   };
 
   useEffect(() => {
+    const socket = io(ENDPOINT);
+
     socket.on('super event', function (data) {
       insertLog(data);
     });

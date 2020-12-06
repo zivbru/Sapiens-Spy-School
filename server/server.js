@@ -6,6 +6,8 @@ const auth = require('./routes/api/auth');
 const socket = require('socket.io');
 const router = express.Router();
 const chokidar = require('chokidar');
+const Log = require('./models/Log');
+
 app.use(cors());
 
 //Connect Db
@@ -42,7 +44,6 @@ app.use(
   router.post('/api/watcher/start', [], async (req, res) => {
     try {
       dir = req.body.path;
-      console.log('dir', dir);
       events[dir] = [];
       watcher = chokidar.watch(dir, {
         ignored: /^\./,
@@ -53,6 +54,7 @@ app.use(
         .on('add', (data) => {
           const msg = { msg: `File ${data} has been added` };
           events[dir].push(msg);
+
           // add to db
           console.log('File', data, 'has been added');
           io.sockets.emit('super event', msg);
@@ -98,6 +100,8 @@ app.use(
         await watcher.unwatch(dir);
       }
       console.log('stop');
+      // watcher;
+      dir = '';
       events[dir] = null;
       // delete db
       return res.send();

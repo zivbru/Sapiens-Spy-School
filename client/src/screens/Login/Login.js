@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import useStyles from './Styles';
-import { login } from '../../store/actions/auth';
+import { login, loginWithGoogle } from '../../store/actions/auth';
+import { GoogleLogin } from 'react-google-login';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Container, Typography, TextField, Button } from '@material-ui/core';
 
-const Login = ({ login }) => {
+const Login = ({ login, loginWithGoogle }) => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,6 +14,13 @@ const Login = ({ login }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     await login(email, password);
+  };
+
+  const responseGoogle = async (res) => {
+    await loginWithGoogle(res);
+  };
+  const onFail = (res) => {
+    return;
   };
 
   return (
@@ -54,6 +62,16 @@ const Login = ({ login }) => {
           >
             Sign In
           </Button>
+          <Container className={classes.googleLogin}>
+            <GoogleLogin
+              clientId='607326949972-maprpiod3v3tbevk0os17rrhso12hvar.apps.googleusercontent.com'
+              buttonText='Sign in with Google'
+              onSuccess={responseGoogle}
+              onFailure={onFail}
+              // isSignedIn={true}
+              cookiePolicy={'single_host_origin'}
+            />
+          </Container>
         </form>
       </div>
     </Container>
@@ -62,6 +80,7 @@ const Login = ({ login }) => {
 
 Login.propTypes = {
   login: PropTypes.func.isRequired,
+  loginWithGoogle: PropTypes.func.isRequired,
   auth: PropTypes.object,
 };
 
@@ -69,4 +88,4 @@ const mapStateToProps = (state) => ({
   auth: state.auth,
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login, loginWithGoogle })(Login);

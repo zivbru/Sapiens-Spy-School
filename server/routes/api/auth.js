@@ -4,7 +4,7 @@ const User = require('../../models/User');
 const passwordHash = require('password-hash');
 
 // @route POST api/auth
-// @desc  User Login & get token
+// @desc  User Login
 // @access Public
 
 router.post('/login', [], async (req, res) => {
@@ -33,6 +33,7 @@ router.post('/login', [], async (req, res) => {
         ],
       });
     }
+
     res.json(user);
   } catch (err) {
     console.log(err.message);
