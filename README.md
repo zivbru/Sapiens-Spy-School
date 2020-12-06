@@ -12,6 +12,7 @@ Please run the commands :
 
 ## Server Folder
 
+### `npm install`
 ### `npm run server / start`
 
 Enjoy!
